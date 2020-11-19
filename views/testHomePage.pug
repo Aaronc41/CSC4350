@@ -1,0 +1,64 @@
+doctype html
+head
+  meta(charset='utf-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+  meta(name='description' content='')
+  meta(name='author' content='')
+  title Lunch For 4
+  // Bootstrap core CSS
+  link(href='vendor/bootstrap/css/bootstrap.min.css' rel='stylesheet')
+  // Custom styles for this template
+  link(href='css/simple-sidebar.css' rel='stylesheet')
+#wrapper.d-flex
+  // Sidebar
+  #sidebar-wrapper.bg-light.border-right
+    .sidebar-heading Lunch For 4 
+    .list-group.list-group-flush
+      a.list-group-item.list-group-item-action.bg-light(href='#') Home
+      a.list-group-item.list-group-item-action.bg-light(href='#') Edit Users
+      a.list-group-item.list-group-item-action.bg-light(href='#') Status
+      a.list-group-item.list-group-item-action.bg-light(href='#') Log Out
+  // /#sidebar-wrapper
+  // Page Content
+  #page-content-wrapper
+    nav.navbar.navbar-expand-lg.navbar-light.bg-light.border-bottom
+      button#menu-toggle.btn.btn-primary Toggle Menu
+      button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+      #navbarSupportedContent.collapse.navbar-collapse
+        ul.navbar-nav.ml-auto.mt-2.mt-lg-0
+          li.nav-item.active
+            a.nav-link(href='#')
+              | Home 
+              span.sr-only (current)
+          li.nav-item
+            a.nav-link(href='#') Link
+          li.nav-item.dropdown
+            a#navbarDropdown.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+              | Dropdown
+            .dropdown-menu.dropdown-menu-right(aria-labelledby='navbarDropdown')
+              a.dropdown-item(href='#') Action
+              a.dropdown-item(href='#') Another action
+              .dropdown-divider
+              a.dropdown-item(href='#') Something else here
+    .container-fluid
+      h1.mt-4 Lunch For 4
+      p
+        | Started by the Aurora University Social Committee (AUSC), Lunch For 4 is a application for students and staff.
+      p
+        | Make sure to keep all page content within the 
+        code #page-content-wrapper
+        | . The top navbar is optional, and just for demonstration. Just create an element with the 
+        code #menu-toggle
+        |  ID which will toggle the menu when clicked.
+  // /#page-content-wrapper
+// /#wrapper
+// Bootstrap core JavaScript
+script(src='vendor/jquery/jquery.min.js')
+script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')
+// Menu Toggle Script
+script.
+  $("#menu-toggle").click(function(e) {
+  e.preventDefault();
+  $("#wrapper").toggleClass("toggled");
+  });
