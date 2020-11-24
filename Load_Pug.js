@@ -4,7 +4,7 @@ app.set('view engine', 'pug');
 
 app.use(express.static('public'));
 
-app.get('/', function(req, res){
+app.get('/login', function(req, res){
     res.render( 'loginPage')
 });
 
