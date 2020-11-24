@@ -4,8 +4,8 @@ app.set('view engine', 'pug');
 
 app.use(express.static('public'));
 
-app.get('/', function(req, res){
-    res.render( 'homePage')
+app.get('/login', function(req, res){
+    res.render( 'loginPage')
 });
 
 app.get('/testHomePage', function(req, res){
