@@ -1,0 +1,21 @@
+extends layout
+block content
+    div(class="container")
+        div(class="loginPage")
+            form(class="form-signin" method="POST" action="/textHomePage")
+                #error
+                    if error
+                        p.text-danger Error!!!
+
+        - var h1Classes = ['h3', 'mb-3', 'font-weight-normal']
+            h1(class="h1Classes") Lunch For 4 Log In
+
+            input(class="inputText" type="email" name="username" id="inputEmail" class="form-control" placeholder="User Name" required autofocus)
+
+            input(class="inputText" type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required)
+
+        - var buttonClass=['btn', 'btn-lg', 'btn-primary', 'btn-block'];
+                button(class="signInButton" type="submit") Sign in
+
+        - var pClasses=['mt-5', 'mb-3', 'text-muted'];
+                p(class="pClasses") Aurora University © 2020
