@@ -8,6 +8,10 @@ app.get('/', function(req, res){
     res.render( 'homePage')
 });
 
+app.get('/testHomePage', function(req, res){
+    res.render('testHomePage')
+});
+
 const bodyParser = require('body-parser');
 app.use( bodyParser.urlencoded({ extended:true }));
 
