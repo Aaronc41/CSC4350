@@ -21,8 +21,7 @@ body {
 {
   margin: auto;
   position: absolute;
-  top: 100%;
-  left: 100%;
+  top: 75%;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
 }
@@ -31,4 +30,10 @@ body {
     width: 375px;
     height: 300px;
     position: relative;
+}
+.error
+{
+  color: red;
+  font-weight: bold;
+  text-align: center;
 }
