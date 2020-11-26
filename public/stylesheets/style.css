@@ -37,3 +37,9 @@ body {
   font-weight: bold;
   text-align: center;
 }
+.signUpButton
+{
+  height:35px;
+  width:345px;
+  margin:auto;
+}
