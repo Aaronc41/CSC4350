@@ -19,7 +19,7 @@ block content
 
                 input(class="inputText" type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required)
 
-                lable(for="departments") Choose Your Department:     
+                label(id='deptselect' for="departments") Choose Your Department:     
                 select(id="departments" name="departments")
                     option(value="CS") Computer Science
                     option(value="BN") Business
@@ -31,6 +31,11 @@ block content
 
                 input(class="signInButton" type="submit" name="Submit" id="Submit" value="Submit")
 
+                input(class="signInButton" type="button" name="Cancel" id="Cancel" value="Cancel" onclick="location.href = '/login';")
+
                 p(class="pClasses") Aurora University ©2020
+    div(class="alertBottom")
+    div(class="alertTop")
+
 
     
