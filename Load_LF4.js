@@ -33,10 +33,12 @@ app.set('view engine', 'pug');
 
 app.use(express.static('public'));
 
-//Monthly check for participants to email
+//Monthly check for participants to email (DO NOT UNCOMMENT, YOU COULD SEND ACCIDENTAL EMAILS TO PEOPLE)
+/*
 if(currentDate == 1){
     emailMonthly();
 }
+*/
 
 
 //Load login page
