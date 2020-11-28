@@ -3,15 +3,37 @@ body {
   height: 100%;
 }
 body {
+  color: white;
+  font-weight: 400;
+  font-family: "Gotham SSm A", "Gotham SSm B", sans-serif;
+  font-size: 1rem;
   padding-top: 40px;
   padding-bottom: 40px;
-  background-color: #f5f5f5;
+  background-color: #00467F;
 }
 .signInButton
 {
     height:35px;
-    width:345px;
-    margin:auto;
+    width:375px;
+    margin: 10px;
+}
+.h1Classes
+{
+  text-align: center;
+
+}
+
+
+.departments
+{
+  position: absolute;
+  bottom: 0;
+
+}
+.deptselect
+{
+  text-align: center;
+
 }
 .pClasses
 {
@@ -21,7 +43,7 @@ body {
 {
   margin: auto;
   position: absolute;
-  top: 75%;
+  top: 100%;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
 }
@@ -40,6 +62,33 @@ body {
 .signUpButton
 {
   height:35px;
-  width:345px;
-  margin:auto;
+  width:375px;
+  margin:10px;
+}
+.inputText
+{
+  height:35px;
+  width:375px;
+  margin:10px;
+}
+.alertTop
+{
+  color: #47AA42;
+  height: 20px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  border-bottom: 27px solid #47AA42;
+  border-width: 25px;
+}
+
+.alertBottom
+{
+  color: #47AA42;
+  height: 20px;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  border-bottom: 27px solid #47AA42;
+  border-width: 25px;
 }
