@@ -75,6 +75,18 @@ app.get('/newUser', function(req, res){
 app.get('/newUserError', function(req,res){
     res.render('newUserError')
 });
+app.get('/userEditInfo', function(req,res){
+    res.render('userEditInfo')
+});
+app.get('/adminEditUsers', function(req,res){
+    res.render('adminEditUsers')
+});
+app.get('/reportsPage', function(req,res){
+    res.render('reportsPage')
+});
+app.get('/participationPage', function(req,res){
+    res.render('participationPage')
+});
 
 app.listen(3000);
 
