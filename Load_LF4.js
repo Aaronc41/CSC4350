@@ -116,17 +116,5 @@ app.get('/newUser', function(req, res){
 app.get('/newUserError', function(req,res){
     res.render('newUserError')
 });
-app.get('/editInfo', function(req,res){
-    res.render('editInfo')
-});
-app.get('/editUsers', function(req,res){
-    res.render('editUsers')
-});
-app.get('/participationStatusPage', function(req,res){
-    res.render('participationStatusPage')
-});
-app.get('/reportsPage', function(req,res){
-    res.render('reportsPage')
-});
 
 app.listen(3000);
