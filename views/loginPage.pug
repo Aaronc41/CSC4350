@@ -2,20 +2,27 @@ extends layout
 block content
     div(class="container")
         div(class="loginPage")
-            form(class="form-signin" method="POST" action="/textHomePage")
+            form(class="form-signin" method="post" action="authenticate")
                 #error
                     if error
                         p.text-danger Error!!!
 
-        - var h1Classes = ['h3', 'mb-3', 'font-weight-normal']
-            h1(class="h1Classes") Lunch For 4 Log In
+                h1(class="h1Classes") AUSC Lunch-For-4 Log In
 
-            input(class="inputText" type="email" name="username" id="inputEmail" class="form-control" placeholder="User Name" required autofocus)
+                input(class="inputText" type="email" name="email" id="inputEmail" class="form-control" placeholder="Email Address" required autofocus)
 
-            input(class="inputText" type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required)
+                input(class="inputText" type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required)
 
-        - var buttonClass=['btn', 'btn-lg', 'btn-primary', 'btn-block'];
-                button(class="signInButton" type="submit") Sign in
+                input(class="signInButton" type="submit" name="Submit" id="Submit" value="Sign In")
 
-        - var pClasses=['mt-5', 'mb-3', 'text-muted'];
-                p(class="pClasses") Aurora University © 2020
+                button(class="signUpButton" type="button" name="SignUp" id="SignUp" value="Sign Up" onclick="location.href = '/newUser';") Sign Up
+
+                
+                p(class="pClasses" href='https://aurora.edu/index.html') Aurora University ©2020
+
+    div(class="alertBottom")
+    div(class="alertTop")
+
+
+
+    
