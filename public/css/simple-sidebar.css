@@ -11,6 +11,7 @@
 #sidebar-wrapper {
   min-height: 100vh;
   margin-left: -15rem;
+  background-color: #378433;
   -webkit-transition: margin .25s ease-out;
   -moz-transition: margin .25s ease-out;
   -o-transition: margin .25s ease-out;
@@ -20,23 +21,36 @@
 #sidebar-wrapper .sidebar-heading {
   padding: 0.875rem 1.25rem;
   font-size: 1.2rem;
+  background-color: #378433;
 }
+
+.bg-light .border-right{
+  background-color: #378433;
+}
+
 
 #sidebar-wrapper .list-group {
   width: 15rem;
 }
+#sidebar-wrapper{
+  background-color: #378433;
+}
 
 #page-content-wrapper {
+  background-color: #00467F;
+  color: white;
   min-width: 100vw;
 }
 
 #wrapper.toggled #sidebar-wrapper {
   margin-left: 0;
+  background-color: #378433;
 }
 
 @media (min-width: 768px) {
   #sidebar-wrapper {
     margin-left: 0;
+    background-color: #378433;
   }
 
   #page-content-wrapper {
@@ -46,5 +60,6 @@
 
   #wrapper.toggled #sidebar-wrapper {
     margin-left: -15rem;
+    
   }
 }

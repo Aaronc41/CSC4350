@@ -1,6 +1,8 @@
 var express = require('express');
 var nodemailer = require('nodemailer');
 var app = express();
+//use middleware to serve static files
+app.use(express.static('public'));
 
 //connect to our database
 var mysql = require('mysql')
@@ -12,6 +14,8 @@ var connection = mysql.createPool({
   password: 'cataDB1',
   database: 'CatalinaDB_F2200'
 })
+
+console.log("Connected");
 
 //Set up mailing
 var transporter = nodemailer.createTransport({
@@ -25,6 +29,13 @@ var transporter = nodemailer.createTransport({
 var currentDate = new Date().getDate();
 var Email = "";
 var name = "";
+var meetingTable = '';
+var userTable = '';
+var successfulMeetings = 0;
+var unsuccessfulMeetings = 0;
+var pendingMeetings = 0;
+
+
 
 const bodyParser = require('body-parser');
 app.use( bodyParser.urlencoded({ extended:true }));
@@ -40,10 +51,14 @@ if(currentDate == 1){
 }
 */
 
+getMeetingsTable();
+
+getUsersTable();
+
 
 //Load login page
 app.get('/login', function(req, res){
-    res.render( 'loginPage')
+    res.render('loginPage');
 });
 
 //Authenticate the user and see if they are admin or not
@@ -80,15 +95,23 @@ app.get('/newUser', function(req, res){
 app.get('/newUserError', function(req,res){
     res.render('newUserError')
 });
+
 app.get('/userEditInfo', function(req,res){
     res.render('userEditInfo')
 });
+
 app.get('/adminEditUsers', function(req,res){
     res.render('adminEditUsers')
 });
-app.get('/reportsPage', function(req,res){
-    res.render('reportsPage')
+
+app.get('/reportsMeetingPage', function(req,res){
+    res.render('reportsMeetingPage', {meetingTable, unsuccessfulMeetings, successfulMeetings, pendingMeetings})
 });
+
+app.get('/reportsUserPage', function(req,res){
+    res.render('reportsUserPage', {userTable})
+});
+
 app.get('/participationPage', function(req,res){
     res.render('participationPage')
 });
@@ -98,7 +121,6 @@ app.listen(3000);
 //All functions go here
 //Checks for active participants and emails them at the 1st of every month
 function emailMonthly(){
-
     connection.getConnection(function(err, connect) {
         if (err) throw err;
         connection.query('SELECT * FROM users', function (err, rows, fields) {
@@ -155,8 +177,8 @@ function addUser(req, res){
             if (err) throw err;
         });
 
-
         connection.releaseConnection(connect);
+
     });
     res.redirect('/login');
 }
@@ -198,6 +220,57 @@ function authenticateUser(req, res){
     });
 }
 
+function getMeetingsTable(){
+    connection.getConnection(function(err, con){
+        if(err) throw err;
+          console.log('connected to meetings');
+        connection.query('select * from meetings', function(err, res, cols){
+          if(err) throw err;
+    
+          console.log('going through meetings now');
+          for(var i=0; i<res.length; i++){
+            meetingTable +='<tr><td>'+ res[i].meeting_Id +'</td><td>'+ res[i].meeting_location +'</td><td>'+ res[i].meeting_date +'</td>'
+            meetingTable +='<td>'+ res[i].leader +'</td><td>'+ res[i].comments +'</td></tr>';
+
+            if(res[i].didMeet == 0)
+            {
+                unsuccessfulMeetings += 1;
+            }
+            else if(res[i].didMeet == 2)
+            {
+                successfulMeetings += 1;
+            }
+            else
+            {
+                pendingMeetings += 1;
+            }
+
+          }
+          connection.releaseConnection(con);
+    
+          meetingTable ='<table border="1" class="meetingTable"><tr><th>Meeting Number</th><th>Meeting Location</th><th>Meeting Date</th><th>Leader</th><th>Comments</th></tr>'+ meetingTable +'</table>';
+        });
+    });
+}
+
+function getUsersTable(){
+    connection.getConnection(function(err, con){
+        if(err) throw err;
+          console.log('connected to users');
+        connection.query('select * from users', function(err, res, cols){
+          if(err) throw err;
+    
+          console.log('going through users now');
+          for(var i=0; i<res.length; i++){
+            userTable +='<tr><td>'+ res[i].aurora_ID +'</td><td>'+ res[i].first_name + ' ' + res[i].last_name +'</td><td>'+ res[i].email +'</td>'
+            userTable +='<td>'+ res[i].department +'</td></tr>';
+          }
+          connection.releaseConnection(con);
+    
+          userTable ='<table border="1" class="userTable"><tr><th>Aurora ID</th><th>Name</th><th>Email</th><th>Department</th></tr>'+ userTable +'</table>';
+        });
+    });
+}
 function changeParticipationStatus(req, res){
     //need to add code to connect to DB and table
     var userName = req.body.email;

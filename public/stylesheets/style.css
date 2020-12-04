@@ -24,12 +24,6 @@ body {
 }
 
 
-.departments
-{
-  position: absolute;
-  bottom: 0;
-
-}
 .deptselect
 {
   text-align: center;
@@ -46,6 +40,22 @@ body {
   top: 100%;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
+}
+.reportsPage
+{
+  margin: auto;
+  position: absolute;
+  left: -30%;
+  width: 575px;
+  padding: 25px;
+}
+.reportsUserPage
+{
+  margin: auto;
+  position: absolute;
+  left: -30%;
+  width: 575px;
+  padding: 25px;
 }
 .container 
 {
@@ -91,4 +101,16 @@ body {
   bottom: 0;
   border-bottom: 27px solid #47AA42;
   border-width: 25px;
+}
+.reportButton
+{
+  height:35px;
+  width:375px;
+  margin: 3px;
+  margin-left: 73px;
+}
+.reportpClasses
+{
+    text-align: left;
+    font-weight: bold;
 }
