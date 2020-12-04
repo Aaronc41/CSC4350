@@ -1,6 +1,8 @@
 var express = require('express');
 var nodemailer = require('nodemailer');
 var app = express();
+//use middleware to serve static files
+app.use(express.static('public'));
 
 //connect to our database
 var mysql = require('mysql')
@@ -12,6 +14,8 @@ var connection = mysql.createPool({
   password: 'cataDB1',
   database: 'CatalinaDB_F2200'
 })
+
+console.log("Connected");
 
 //Set up mailing
 var transporter = nodemailer.createTransport({
