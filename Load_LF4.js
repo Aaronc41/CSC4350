@@ -66,6 +66,11 @@ app.post('/authenticate', function(req, res){
     authenticateUser(req, res);
 });
 
+app.post('/participationPage', function(req, res){
+    changeParticipationStatus(req, res);
+});
+
+
 //Adds user from sign up page
 app.post('/addUser', function(req, res){
     addUser(req, res);
@@ -264,5 +269,37 @@ function getUsersTable(){
     
           userTable ='<table border="1" class="userTable"><tr><th>Aurora ID</th><th>Name</th><th>Email</th><th>Department</th></tr>'+ userTable +'</table>';
         });
+    }
+}
+function changeParticipationStatus(req, res){
+    //need to add code to connect to DB and table
+    var userName = req.body.email;
+    var p_status = req.body.participant_status;
+
+    connection.getConnection(function(err, connect) {
+        if (err) throw err;
+        connection.query('SELECT * FROM users', function (err, rows, fields) {
+            if (err) throw err;
+
+            //Goes through all users and finds the right one
+            for(var user in rows){
+
+                if (rows[user].email == userName){
+                    
+                    //Grabs the email and name to be used in other pages, may add more here later
+                    if()
+                    Email = rows[user].email;
+                    name = rows[user].first_name;
+
+                    //Determines if user is an admin and if the admin page should load instead
+                    if(rows[user].isAdmin == 1){
+                        return res.redirect('/adminHomePage');
+                    };
+                    //if they're not an admin, the user page loads instead
+                    return res.redirect('/userHomePage');
+                };
+            };
+        });
+        connection.releaseConnection(connect);
     });
 }
