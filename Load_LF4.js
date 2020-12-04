@@ -269,7 +269,7 @@ function getUsersTable(){
     
           userTable ='<table border="1" class="userTable"><tr><th>Aurora ID</th><th>Name</th><th>Email</th><th>Department</th></tr>'+ userTable +'</table>';
         });
-    }
+    });
 }
 function changeParticipationStatus(req, res){
     //need to add code to connect to DB and table
