@@ -58,16 +58,16 @@ head
                 div.formgroup
                     label(for='status') Set to Active 
                     //sets user to active
-                    input#active(type='radio',value='1', name="status")
+                    input#active(type='radio',value='1', name="status" required)
                 div.formgroup
                     label(for='status') Set to Inactive 
                     // sets user to inactive
-                    input#inactive(type='radio',value='0', name="status")
+                    input#inactive(type='radio',value='0', name="status" required)
                 div.formgroup
                     label(for="comments")
                     input(class="form-control" placeholder="Optional Comments" required autofocus)
                 .fromgroup
-                    button( type="button" name="changeStatus" id="changeStatus" value="changeStatus" onclick="location.href = '/confirmationParticipation';") Submit
+                    input(class="signInButton" type="submit" name="Submit" id="Submit" value="Submit")
 
   // /#page-content-wrapper
 // /#wrapper
