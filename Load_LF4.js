@@ -274,7 +274,7 @@ function getUsersTable(){
 function changeParticipationStatus(req, res){
     //need to add code to connect to DB and table
     var userName = req.body.email;
-    var p_status = req.body.participant_status;
+    var p_status = req.body.changeParticipationStatus;
 
     connection.getConnection(function(err, connect) {
         if (err) throw err;
@@ -286,15 +286,9 @@ function changeParticipationStatus(req, res){
 
                 if (rows[user].email == userName){
                     
-                    //Grabs the email and name to be used in other pages, may add more here later
-                    if()
-                    Email = rows[user].email;
-                    name = rows[user].first_name;
+                    //Checks if it is for the current user logged in
+                    participant_status = 0;
 
-                    //Determines if user is an admin and if the admin page should load instead
-                    if(rows[user].isAdmin == 1){
-                        return res.redirect('/adminHomePage');
-                    };
                     //if they're not an admin, the user page loads instead
                     return res.redirect('/userHomePage');
                 };
@@ -302,4 +296,5 @@ function changeParticipationStatus(req, res){
         });
         connection.releaseConnection(connect);
     });
+    res.redirect('/confirmationParticipation');
 }
