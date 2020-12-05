@@ -46,28 +46,7 @@ head
               a.dropdown-item(href='#') Something else here
     .container-fluid
         h1.mt-4 Lunch For 4 Participation Status
-        p
-            | Down below you can change your participation status.
-        p
-            | If you change your status to 'Active' in the middle of the month, it will take up until the next month before you are put into a group.
-        p 
-            | Your current status is ... 
-
-        div
-            form(method="post" action="changeParticipationStatus")
-                div.formgroup
-                    label(for='status') Set to Active 
-                    //sets user to active
-                    input#active(type='radio',value='1', name="status" required)
-                div.formgroup
-                    label(for='status') Set to Inactive 
-                    // sets user to inactive
-                    input#inactive(type='radio',value='0', name="status" required)
-                div.formgroup
-                    label(for="comments")
-                    input(class="form-control" placeholder="Optional Comments" required autofocus)
-                .fromgroup
-                    input(class="signInButton" type="submit" name="Submit" id="Submit" value="Submit")
+        h3.mt-4 You have successfully changed your participation status.
 
   // /#page-content-wrapper
 // /#wrapper
