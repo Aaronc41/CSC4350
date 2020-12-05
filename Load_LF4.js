@@ -66,7 +66,7 @@ app.post('/authenticate', function(req, res){
     authenticateUser(req, res);
 });
 
-app.post('/participationPage', function(req, res){
+app.post('/changeParticipationStatus', function(req, res){
     changeParticipationStatus(req, res);
 });
 
@@ -114,6 +114,10 @@ app.get('/reportsUserPage', function(req,res){
 
 app.get('/participationPage', function(req,res){
     res.render('participationPage')
+});
+
+app.get('/confirmationParticipation', function(req,res){
+    res.render('confirmationParticipation');
 });
 
 app.listen(3000);
@@ -273,28 +277,45 @@ function getUsersTable(){
 }
 function changeParticipationStatus(req, res){
     //need to add code to connect to DB and table
-    var userName = req.body.email;
-    var p_status = req.body.changeParticipationStatus;
+    var userName = Email;
+    var p_status = req.body.status;
+    console.log(p_status);
 
     connection.getConnection(function(err, connect) {
         if (err) throw err;
         connection.query('SELECT * FROM users', function (err, rows, fields) {
             if (err) throw err;
 
-            //Goes through all users and finds the right one
-            for(var user in rows){
+            console.log(p_status);
+            console.log(userName);
+            if(p_status == '0'){
+                //Goes through all users and finds the right one
+                for(var user in rows){
 
-                if (rows[user].email == userName){
+                    if (rows[user].email == userName){
                     
-                    //Checks if it is for the current user logged in
-                    participant_status = 0;
+                        //Checks if it is for the current user logged in
+                        connection.query('UPDATE users SET participant_status = ' + '0' + ' WHERE email = "' + userName + '"', function(err, result){
+                            return res.redirect('/confirmationParticipation');
+                        });
 
                     //if they're not an admin, the user page loads instead
-                    return res.redirect('/userHomePage');
+                    
+                    };
                 };
-            };
+            }
+            else if(p_status == '1'){
+                for(var user in rows){
+                    if (rows[user].email == userName){
+                        console.log("Changing status")
+
+                        connection.query('UPDATE users SET participant_status = ' + '1' + ' WHERE email = "' + userName + '"', function(err, result){
+                            return res.redirect('/confirmationParticipation');
+                        });
+                    };
+                }
+            }   
         });
         connection.releaseConnection(connect);
     });
-    res.redirect('/confirmationParticipation');
 }
