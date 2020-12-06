@@ -80,6 +80,9 @@ app.post('/changeParticipationStatus', function(req, res){
 app.post('/addUser', function(req, res){
     addUser(req, res);
 });
+app.post('/editUser', function(req, res){
+    editUser(req, res);
+});
 
 app.get('/loginError', function(req, res){
     res.render('loginError')
@@ -190,6 +193,41 @@ function addUser(req, res){
 
     });
     res.redirect('/login');
+}
+// Edit user
+function editUser(req, res){
+    var firstName = req.body.fName;
+    var useremail = Email;
+    var lastName = req.body.lName;
+    var newEmail = req.body.email;
+    var password = req.body.password;
+    var ID = req.body.AUID;
+    var department = req.body.departments;
+    var AUemail = newEmail.slice(-11);
+    var AuroraEdu = "@aurora.edu";
+    var emailVerify = AuroraEdu.localeCompare(AUemail);
+    var values = [
+        [ID, firstName, lastName, newEmail, password, 0, department, 0]
+    ];
+
+    console.log(emailVerify);
+
+    if(emailVerify != 0){
+        return res.redirect('/newUserError');
+    };
+
+
+    connection.getConnection(function(err, connect) {
+        if (err) throw err;
+        var query = 'UPDATE users SET aurora_ID = ?, first_name = ?, last_name = ?, email = ?, department = ?, password = ? WHERE email = ?';
+        connection.query(query,[ID, firstName, lastName, useremail, department, password, useremail], function (err,result, rows, fields) {
+            if (err) throw err;
+        });
+
+        connection.releaseConnection(connect);
+
+    });
+    res.redirect('/userHomePage');
 }
 
 //Code for authenticating user
