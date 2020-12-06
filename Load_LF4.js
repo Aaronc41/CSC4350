@@ -29,12 +29,15 @@ var transporter = nodemailer.createTransport({
 
 var currentDate = new Date().getDate();
 var Email = "";
-var name = "";
+var isLeader = false;
 var meetingTable = '';
 var userTable = '';
 var successfulMeetings = 0;
 var unsuccessfulMeetings = 0;
 var pendingMeetings = 0;
+var groups = [];
+var allUsers = [];
+var meetingIDs = [];
 
 
 
@@ -52,6 +55,13 @@ if(currentDate == 1){
 }
 */
 
+//On the 15th of each month, it will create new meetings
+if(currentDate == 15){
+    resetLeaders();
+    createGroups();
+}
+
+//Grabs the meeting and user tables from the DB for reporting
 getMeetingsTable();
 
 getUsersTable();
@@ -59,6 +69,8 @@ getUsersTable();
 
 //Load login page
 app.get('/login', function(req, res){
+    Email = '';
+    isLeader = false;
     res.render('loginPage');
 });
 
@@ -93,12 +105,22 @@ app.get('/loginError', function(req, res){
 });
 
 app.get('/userHomePage', function(req, res){
-    res.render('userHomePage')
+    if(isLeader){
+        var leaderTab = '<a class="list-group-item list-group-item-action bg-light" href="/leaderPage">Leadership</a>';
+    }
+    res.render('userHomePage', {leaderTab});
 });
 
 app.get('/adminHomePage', function(req, res){
-    res.render('adminHomePage')
+    if(isLeader){
+        var leaderTab = '<a class="list-group-item list-group-item-action bg-light" href="/leaderPage">Leadership</a>';
+    }
+    res.render('adminHomePage', {leaderTab});
 });
+
+app.get('/leaderPage', function(req,res){
+    res.render('leaderPage');
+})
 
 app.get('/newUser', function(req, res){
     res.render('newUser')
@@ -287,7 +309,10 @@ function authenticateUser(req, res){
                     
                     //Grabs the email and name to be used in other pages, may add more here later
                     Email = rows[user].email;
-                    name = rows[user].first_name;
+
+                    if(rows[user].isLeader == 1){
+                        isLeader = true;
+                    }
 
                     //Determines if user is an admin and if the admin page should load instead
                     if(rows[user].isAdmin == 1){
@@ -333,7 +358,7 @@ function getMeetingsTable(){
 
           }
           connection.releaseConnection(con);
-    
+          
           meetingTable ='<table border="1" class="meetingTable"><tr><th>Meeting Number</th><th>Meeting Location</th><th>Meeting Date</th><th>Leader</th><th>Comments</th></tr>'+ meetingTable +'</table>';
         });
     });
@@ -357,6 +382,7 @@ function getUsersTable(){
         });
     });
 }
+
 function changeParticipationStatus(req, res){
     //need to add code to connect to DB and table
     var userName = Email;
@@ -402,7 +428,6 @@ function changeParticipationStatus(req, res){
         connection.releaseConnection(connect);
     });
 }
-// Comments Bar on Status Page, Needs to be fixed slightly
 
 /*function changeParticipationNotes(req, res){
     //need to add code to connect to DB and table
@@ -438,3 +463,117 @@ function changeParticipationStatus(req, res){
         connection.releaseConnection(connect);
     });
 }*/
+
+//Create groups on the 15th of each month
+function createGroups() {
+    connection.getConnection(function(err, con){
+        if(err) throw err;
+
+        //Clears out meetings from last month
+        connection.query('DELETE FROM meetings;');
+
+        //Grabs all users and sets them into an array for sorting and randomization
+        connection.query('select * from users;', function(err, rows, cols){
+            if(err) throw err;
+            for(var users in rows){
+                allUsers.push(rows[users].email);
+            }
+
+            //Randomizes here
+            shuffle(allUsers);
+
+            //Finds total number of meetings for the month by finding out how many users are available,
+            //then dividing them by the max group size (5 in this case). It then rounds up to the nearest
+            //number, which should always give us the proper total number of meetings for each month 
+            var userCount = allUsers.length;
+            var totalMeetings = Math.ceil(userCount/5);
+
+            //Creates the meetings
+            for(var i = 0; i < totalMeetings; i++){
+                connection.query('INSERT INTO meetings(meeting_Id, didMeet) VALUES (0, 1);');
+            }   
+
+            //Divides up all users into seperate arrays where the max size is the total number of meetings
+            while(allUsers.length > 0){
+                groups.push(allUsers.splice(0, totalMeetings));
+            }
+
+            //Grabs all the new meeting IDs that were just created and throws them into an array
+            connection.query('SELECT * FROM meetings', function(err, rows, cols){
+                if(err) throw err;
+                for(var meets in rows){
+                    meetingIDs.push(rows[meets].meeting_Id);
+                }
+
+                //Use a nested for loop to go through each of the seperated arrays. Assigns all the users
+                //from the first array into participant1, then assigns all from the second array into
+                //participant2 etc. until the whole table is properly populated and no group is below or
+                //above the required amount of members
+                for(var i = 0; i < groups.length; i++){
+                    for(var j = 0; j < groups[i].length; j++){
+                        var participant = groups[i][j];
+                        var participantNumber = i + 1;
+                        connection.query('UPDATE meetings SET participant' + participantNumber + ' = "' + participant + '" WHERE meeting_Id=' + meetingIDs[j] +';');
+                    }
+                }
+
+                //Finds the leader for each meeting randomly
+                connection.query('SELECT * FROM meetings', function(err, rows, cols){
+                    if(err) throw err;
+                    for(var meets in rows){
+                        var leaderAssign = [];
+                        leaderAssign.push(rows[meets].participant1);
+                        leaderAssign.push(rows[meets].participant2);
+                        leaderAssign.push(rows[meets].participant3);
+                        if(rows[meets].participant4 != null){
+                            leaderAssign.push(rows[meets].participant4);
+                        }
+                        if(rows[meets].participant5 != null){
+                            leaderAssign.push(rows[meets].participant5);
+                        }
+                        var leader = leaderAssign[Math.floor(Math.random() * leaderAssign.length)];
+
+                        connection.query('UPDATE meetings SET leader = "' + leader + '" WHERE participant1 = "' + leaderAssign[0] + '";');
+                        connection.query('UPDATE users SET isLeader = 1 WHERE email = "' + leader + '";');
+                    }
+                })
+            })
+        });
+    });
+}
+
+function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+  
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+  
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+  
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+  
+    return array;
+  }
+
+  function resetLeaders(){
+      connection.getConnection(function(err, con){
+          if(err) throw err;
+        connection.query('SELECT * FROM users', function(err, rows, cols){
+            if(err) throw err;
+            
+            for(var user in rows){
+                var Email = rows[user].email;
+                connection.query('UPDATE users SET isLeader = 0 WHERE email = "' + Email + '";');
+            }
+
+        });
+        connection.releaseConnection(con);
+      });
+      
+  }
