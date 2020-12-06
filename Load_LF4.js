@@ -7,6 +7,7 @@ app.use(express.static('public'));
 //connect to our database
 var mysql = require('mysql')
 var connection = mysql.createPool({
+
   connectionLimit: 10,
   host: '45.55.136.114',
   port: '3306',
@@ -68,7 +69,11 @@ app.post('/authenticate', function(req, res){
 
 app.post('/changeParticipationStatus', function(req, res){
     changeParticipationStatus(req, res);
+   // changeParticipationNotes(req, res);
 });
+//app.post('/changeParticipationNotes', function(req, res){
+ //   changeParticipationNotes(req, res);
+//});
 
 
 //Adds user from sign up page
@@ -279,15 +284,16 @@ function changeParticipationStatus(req, res){
     //need to add code to connect to DB and table
     var userName = Email;
     var p_status = req.body.status;
-    console.log(p_status);
-
+    //var p_comments = req.body.comments
+    //console.log(p_status);
+    //console.log(p_comments);
     connection.getConnection(function(err, connect) {
         if (err) throw err;
         connection.query('SELECT * FROM users', function (err, rows, fields) {
             if (err) throw err;
 
-            console.log(p_status);
-            console.log(userName);
+            //console.log(p_status);
+            //console.log(userName);
             if(p_status == '0'){
                 //Goes through all users and finds the right one
                 for(var user in rows){
@@ -296,11 +302,11 @@ function changeParticipationStatus(req, res){
                     
                         //Checks if it is for the current user logged in
                         connection.query('UPDATE users SET participant_status = ' + '0' + ' WHERE email = "' + userName + '"', function(err, result){
-                            return res.redirect('/confirmationParticipation');
+                                res.redirect('/confirmationParticipation');
                         });
+                        
 
                     //if they're not an admin, the user page loads instead
-                    
                     };
                 };
             }
@@ -319,3 +325,39 @@ function changeParticipationStatus(req, res){
         connection.releaseConnection(connect);
     });
 }
+// Comments Bar on Status Page, Needs to be fixed slightly
+
+/*function changeParticipationNotes(req, res){
+    //need to add code to connect to DB and table
+    var userName = Email;
+    var p_comments = req.body.comments
+    var runnable = true;
+    console.log("In function");
+    console.log(userName);
+    connection.getConnection(function(err, connect) {
+        if (err) throw err;
+        connection.query('SELECT * FROM users', function (err, rows, fields) {
+            if (err) throw err;
+
+            //console.log(p_status);
+            console.log(userName);
+            if(runnable = true){
+                //Goes through all users and finds the right one
+                for(var user in rows){
+
+                    if (rows[user].email == userName){
+                    
+                        connection.query('UPDATE users SET partNotes = '+ p_comments +' WHERE email="'+userName+'"', function(err, result){
+                            console.log("worked");
+                            console.log(p_comments);
+                            console.log(Email);
+                            console.log('Rows affected:');
+                            //return res.redirect('/confirmationParticipation');
+                            });
+                    };
+                };
+            }
+        });
+        connection.releaseConnection(connect);
+    });
+}*/

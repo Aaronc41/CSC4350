@@ -63,11 +63,15 @@ head
                     label(for='status') Set to Inactive 
                     // sets user to inactive
                     input#inactive(type='radio',value='0', name="status" required)
-                div.formgroup
+                //div.formgroup
                     label(for="comments")
-                    input(class="form-control" placeholder="Optional Comments" required autofocus)
+                    input(class="form-control",name="comments" placeholder="Optional Comments" required autofocus)
                 .fromgroup
-                    input(class="signInButton" type="submit" name="Submit" id="Submit" value="Submit")
+                    input(class="signInButton" type="submit" name="Submit" id="Submit" value="Submit Status")
+    
+
+
+
 
   // /#page-content-wrapper
 // /#wrapper
