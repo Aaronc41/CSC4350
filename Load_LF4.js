@@ -657,9 +657,9 @@ function shuffle(array) {
     }
   
     return array;
-  }
+}
 
-  function resetLeaders(){
+function resetLeaders(){
       connection.getConnection(function(err, con){
           if(err) throw err;
         connection.query('SELECT * FROM users', function(err, rows, cols){
