@@ -2,24 +2,29 @@ extends layout
 block content
     div(class="container")
         div(class="loginPage")
-            form(class="form-signin" method="post" action="addUser")
+            form(class="form-signin" method="post" action="adminEditUser")
                 #error
                     if error
                         p.text-danger Error!!!
 
-                h1(class="h1Classes") Add User
+                h1(class="h1Classes") Edit A Users Info
+                p
+                | Enter the users email you want to edit
+                input(class="inputText" type="text" name="toEdit" id="toEdit" class="form-control" placeholder="email of user" required autofocus)
+                p
+                | Here you can edit the users info
 
-                input(class="inputText" type="text" name="fName" id="fName" class="form-control" placeholder="First Name" required autofocus)
+                input(class="inputText" type="text" name="fName" id="fName" class="form-control" placeholder="First Name" )
 
-                input(class="inputText" type="text" name="lName" id="lName" class="form-control" placeholder="Last Name" required)
+                input(class="inputText" type="text" name="lName" id="lName" class="form-control" placeholder="Last Name" )
 
-                input(class="inputText" type="text" name="AUID" id="AUID" class="form-control" placeholder="Aurora ID" required)
+                input(class="inputText" type="text" name="AUID" id="AUID" class="form-control" placeholder="Aurora ID" )
 
-                input(class="inputText" type="email" name="email" id="inputEmail" class="form-control" placeholder="Email Address" required)
+                input(class="inputText" type="email" name="editthisemail" id="inputEmail" class="form-control" placeholder="Email Address" )
 
-                input(class="inputText" type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required)
+                input(class="inputText" type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" )
 
-                label(id='deptselect' for="departments") Choose Your Department:     
+                label(id='deptselect' for="departments") Choose Department:     
                 select(id="departments" name="departments")
                     option(value="CS") Computer Science
                     option(value="BN") Business
@@ -28,7 +33,7 @@ block content
                     option(value="EN") English
                     option(value="Staff") AU Staff
 
-                input(class="signInButton" type="submit" name="Submit" id="Submit" value="Submit" onclick="location.href = '/adminEditUsers';")
+                input(class="signInButton" type="submit" name="Submit" id="Submit" value="Submit" onclick="location.href = '/landing';")
 
                 input(class="signInButton" type="button" name="Cancel" id="Cancel" value="Home" onclick="location.href = '/adminHomePage';")
 
