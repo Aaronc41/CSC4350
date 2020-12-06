@@ -84,6 +84,10 @@ app.post('/editUser', function(req, res){
     editUser(req, res);
 });
 
+app.post('/adminEditUser', function(req, res){
+    adminEditUser(req, res);
+});
+
 app.get('/loginError', function(req, res){
     res.render('loginError')
 });
@@ -103,13 +107,21 @@ app.get('/newUser', function(req, res){
 app.get('/newUserError', function(req,res){
     res.render('newUserError')
 });
+app.get('/error', function(req,res){
+    res.render('error')
+});
 
 app.get('/userEditInfo', function(req,res){
     res.render('userEditInfo')
 });
-
 app.get('/adminEditUsers', function(req,res){
     res.render('adminEditUsers')
+});
+app.get('/landing', function(req,res){
+    res.render('landing')
+});
+app.get('/adminAddUsers', function(req,res){
+    res.render('adminAddUsers')
 });
 
 app.get('/reportsMeetingPage', function(req,res){
@@ -179,7 +191,7 @@ function addUser(req, res){
     console.log(emailVerify);
 
     if(emailVerify != 0){
-        return res.redirect('/newUserError');
+        return res.redirect('/login');
     };
 
 
@@ -199,6 +211,7 @@ function editUser(req, res){
     var firstName = req.body.fName;
     var useremail = Email;
     var lastName = req.body.lName;
+    var editThis = req.body.toEdit;
     var newEmail = req.body.email;
     var password = req.body.password;
     var ID = req.body.AUID;
@@ -213,7 +226,7 @@ function editUser(req, res){
     console.log(emailVerify);
 
     if(emailVerify != 0){
-        return res.redirect('/newUserError');
+        return res.redirect('/error');
     };
 
 
@@ -228,6 +241,32 @@ function editUser(req, res){
 
     });
     res.redirect('/userHomePage');
+}
+
+
+//searching and editing a user
+function adminEditUser(req, res){
+    var firstName = req.body.fName;
+    var useremail = req.body.editthisemail;
+    var lastName = req.body.lName;
+    var editThis = req.body.toEdit;
+    var newEmail = req.body.email;
+    var password = req.body.password;
+    var ID = req.body.AUID;
+    var department = req.body.departments;
+    
+
+    connection.getConnection(function(err, connect) {
+        if (err) throw err;
+        var query = 'UPDATE users SET aurora_ID = ?, first_name = ?, last_name = ?, email = ?, department = ?, password = ? WHERE email = ?';
+        connection.query(query,[ID, firstName, lastName, useremail, department, password, editThis], function (err,result, rows, fields) {
+            if (err) throw err;
+        });
+
+        connection.releaseConnection(connect);
+
+    });
+    res.redirect('/landing');
 }
 
 //Code for authenticating user
