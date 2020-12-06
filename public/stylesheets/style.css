@@ -1,28 +1,31 @@
 html,
 body {
   height: 100%;
+  background-color: #00467F;
+  color: white;
+  font-family: "Gotham SSm A", "Gotham SSm B", sans-serif;
 }
-body {
+/*body {
   color: white;
   font-weight: 400;
   font-family: "Gotham SSm A", "Gotham SSm B", sans-serif;
-  font-size: 1rem;
+  font-size: rem;
   padding-top: 40px;
   padding-bottom: 40px;
   background-color: #00467F;
 }
-.signInButton
-{
-    height:35px;
-    width:375px;
-    margin: 10px;
-}
+*/
+
 .h1Classes
 {
   text-align: center;
 
 }
 
+#image{
+  position: absolute;
+  
+}
 
 .deptselect
 {
@@ -70,6 +73,12 @@ body {
   text-align: center;
 }
 .signUpButton
+{
+  height:35px;
+  width:375px;
+  margin:10px;
+}
+.signInButton
 {
   height:35px;
   width:375px;
