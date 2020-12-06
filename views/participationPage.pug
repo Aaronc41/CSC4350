@@ -45,22 +45,21 @@ head
               .dropdown-divider
               a.dropdown-item(href='#') Something else here
     .container-fluid
-        h1.mt-4 Lunch For 4 Participation Status
+        h2 Lunch For 4 Participation Status
         p
             | Down below you can change your participation status.
         p
             | If you change your status to 'Active' in the middle of the month, it will take up until the next month before you are put into a group.
-        p 
-            | Your current status is ... 
-
+        h4
+            | Here is your status: !{statusLabel}
         div
             form(method="post" action="changeParticipationStatus")
                 div.formgroup
-                    label(for='status') Set to Active 
+                    label(for='status' id='options') Set to Active --
                     //sets user to active
                     input#active(type='radio',value='1', name="status" required)
                 div.formgroup
-                    label(for='status') Set to Inactive 
+                    label(for='status' id='options') Set to Inactive --
                     // sets user to inactive
                     input#inactive(type='radio',value='0', name="status" required)
                 //div.formgroup
