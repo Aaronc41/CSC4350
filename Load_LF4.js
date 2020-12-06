@@ -8,12 +8,12 @@ app.use(express.static('public'));
 var mysql = require('mysql')
 var connection = mysql.createPool({
 
-  connectionLimit: 10,
-  host: '45.55.136.114',
-  port: '3306',
-  user: 'CatalinaDB_F2200',
-  password: 'cataDB1',
-  database: 'CatalinaDB_F2200'
+    connectionLimit: 10,
+    host: '45.55.136.114',
+    port: '3306',
+    user: 'CatalinaDB_F2200',
+    password: 'cataDB1',
+    database: 'CatalinaDB_F2200'
 })
 //shows connected to database in console
 console.log("Connected");
@@ -22,10 +22,10 @@ console.log("Connected");
 var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'lunchforfour@gmail.com',
-      pass: 'aurora23!'
+        user: 'lunchforfour@gmail.com',
+        pass: 'aurora23!'
     }
-  });
+});
 
 var currentDate = new Date().getDate();
 var Email = "";
@@ -42,7 +42,7 @@ var meetingIDs = [];
 
 
 const bodyParser = require('body-parser');
-app.use( bodyParser.urlencoded({ extended:true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set('view engine', 'pug');
 
@@ -56,7 +56,7 @@ if(currentDate == 1){
 */
 
 //On the 15th of each month, it will create new meetings
-if(currentDate == 15){
+if (currentDate == 15) {
     resetLeaders();
     createGroups();
 }
@@ -64,104 +64,101 @@ if(currentDate == 15){
 //Grabs the meeting and user tables from the DB for reporting
 getMeetingsTable();
 
-//getUsersStatus();
-
 getUsersTable();
 
 //Load login page
-app.get('/login', function(req, res){
+app.get('/login', function (req, res) {
     Email = '';
     isLeader = false;
     res.render('loginPage');
 });
 //Authenticate the user and see if they are admin or not
-app.post('/authenticate', function(req, res){
+app.post('/authenticate', function (req, res) {
     authenticateUser(req, res);
 });
 //Change Participation Status
-app.post('/changeParticipationStatus', function(req, res){
+app.post('/changeParticipationStatus', function (req, res) {
     changeParticipationStatus(req, res);
 });
+app.post('/leaderEditMeeting', function (req, res) {
+    leaderEditMeeting(req, res);
+});
 
-
-//In Progress Change notes Function - Leave commented out
-//app.post('/changeParticipationNotes', function(req, res){
- //   changeParticipationNotes(req, res);
-//});
-
-
+app.post('/changeParticipationNotes', function (req, res) {
+    changeParticipationNotes(req, res);
+});
 //Adds user from sign up page
-app.post('/addUser', function(req, res){
+app.post('/addUser', function (req, res) {
     addUser(req, res);
 });
 //Edits user
-app.post('/editUser', function(req, res){
+app.post('/editUser', function (req, res) {
     editUser(req, res);
 });
 //Edit user by Admin
-app.post('/adminEditUser', function(req, res){
+app.post('/adminEditUser', function (req, res) {
     adminEditUser(req, res);
 });
 
-app.get('/loginError', function(req, res){
+app.get('/loginError', function (req, res) {
     res.render('loginError')
 });
 
-app.get('/userHomePage', function(req, res){
-    if(isLeader){
+app.get('/userHomePage', function (req, res) {
+    if (isLeader) {
         var leaderTab = '<a class="list-group-item list-group-item-action bg-light" href="/leaderPage">Leadership</a>';
     }
-    res.render('userHomePage', {leaderTab});
+    res.render('userHomePage', { leaderTab });
 });
 
-app.get('/adminHomePage', function(req, res){
-    if(isLeader){
+app.get('/adminHomePage', function (req, res) {
+    if (isLeader) {
         var leaderTab = '<a class="list-group-item list-group-item-action bg-light" href="/leaderPage">Leadership</a>';
     }
-    res.render('adminHomePage', {leaderTab});
+    res.render('adminHomePage', { leaderTab });
 });
 
-app.get('/leaderPage', function(req,res){
+app.get('/leaderPage', function (req, res) {
     res.render('leaderPage');
 })
 
-app.get('/newUser', function(req, res){
+app.get('/newUser', function (req, res) {
     res.render('newUser')
 });
 
-app.get('/newUserError', function(req,res){
+app.get('/newUserError', function (req, res) {
     res.render('newUserError')
 });
-app.get('/error', function(req,res){
+app.get('/error', function (req, res) {
     res.render('error')
 });
 
-app.get('/userEditInfo', function(req,res){
+app.get('/userEditInfo', function (req, res) {
     res.render('userEditInfo')
 });
-app.get('/adminEditUsers', function(req,res){
+app.get('/adminEditUsers', function (req, res) {
     res.render('adminEditUsers')
 });
-app.get('/landing', function(req,res){
+app.get('/landing', function (req, res) {
     res.render('landing')
 });
-app.get('/adminAddUsers', function(req,res){
+app.get('/adminAddUsers', function (req, res) {
     res.render('adminAddUsers')
 });
 
-app.get('/reportsMeetingPage', function(req,res){
-    res.render('reportsMeetingPage', {meetingTable, unsuccessfulMeetings, successfulMeetings, pendingMeetings})
+app.get('/reportsMeetingPage', function (req, res) {
+    res.render('reportsMeetingPage', { meetingTable, unsuccessfulMeetings, successfulMeetings, pendingMeetings })
 });
 
-app.get('/reportsUserPage', function(req,res){
-    res.render('reportsUserPage', {userTable})
+app.get('/reportsUserPage', function (req, res) {
+    res.render('reportsUserPage', { userTable })
 });
 
-app.get('/participationPage', function(req,res){
+app.get('/participationPage', function (req, res) {
     res.render('participationPage')
 });
 
-app.get('/confirmationParticipation', function(req,res){
+app.get('/confirmationParticipation', function (req, res) {
     res.render('confirmationParticipation');
 });
 
@@ -170,8 +167,8 @@ app.listen(3000);
 //All functions go here
 
 //Checks for active participants and emails them at the 1st of every month
-function emailMonthly(){
-    connection.getConnection(function(err, connect) {
+function emailMonthly() {
+    connection.getConnection(function (err, connect) {
         if (err) throw err;
         connection.query('SELECT * FROM users', function (err, rows, fields) {
             if (err) throw err;
@@ -181,26 +178,26 @@ function emailMonthly(){
                 to: rows[user].email,
                 subject: 'Monthly Reminder from Lunch For Four',
                 text: 'We are reminding you that you have a meeting sometime this month. Please log in to check times and if you need to suspend. Thank you for using Lunch For Four!'
-              };
+            };
 
-            for(var user in rows){
-                if(rows[user].participant_status == 1){
-                    transporter.sendMail(mailOptions, function(error, info){
+            for (var user in rows) {
+                if (rows[user].participant_status == 1) {
+                    transporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
-                          console.log(error);
+                            console.log(error);
                         } else {
-                          console.log('Email sent: ' + info.response);
+                            console.log('Email sent: ' + info.response);
                         }
                     });
                 }
             }
         });
-    connection.releaseConnection(connect);
+        connection.releaseConnection(connect);
     });
 }
 
 //Code for adding a user to the DB from the sign up page
-function addUser(req, res){
+function addUser(req, res) {
     var firstName = req.body.fName;
     var lastName = req.body.lName;
     var newEmail = req.body.email;
@@ -216,12 +213,12 @@ function addUser(req, res){
 
     console.log(emailVerify);
 
-    if(emailVerify != 0){
+    if (emailVerify != 0) {
         return res.redirect('/login');
     };
 
 
-    connection.getConnection(function(err, connect) {
+    connection.getConnection(function (err, connect) {
         if (err) throw err;
         connection.query(`INSERT INTO users (aurora_ID, first_name, last_name, email, password, participant_status, department, isAdmin) VALUES ?`, [values], function (err, rows, fields) {
             if (err) throw err;
@@ -233,7 +230,8 @@ function addUser(req, res){
     res.redirect('/login');
 }
 // Edit User by that User
-function editUser(req, res){
+//JK
+function editUser(req, res) {
     var firstName = req.body.fName;
     var useremail = Email;
     var lastName = req.body.lName;
@@ -251,15 +249,15 @@ function editUser(req, res){
 
     console.log(emailVerify);
 
-    if(emailVerify != 0){
+    if (emailVerify != 0) {
         return res.redirect('/error');
     };
 
 
-    connection.getConnection(function(err, connect) {
+    connection.getConnection(function (err, connect) {
         if (err) throw err;
         var query = 'UPDATE users SET aurora_ID = ?, first_name = ?, last_name = ?, email = ?, department = ?, password = ? WHERE email = ?';
-        connection.query(query,[ID, firstName, lastName, useremail, department, password, useremail], function (err,result, rows, fields) {
+        connection.query(query, [ID, firstName, lastName, useremail, department, password, useremail], function (err, result, rows, fields) {
             if (err) throw err;
         });
 
@@ -271,7 +269,8 @@ function editUser(req, res){
 
 
 //Admin search user, then able to Edit their info
-function adminEditUser(req, res){
+//JK
+function adminEditUser(req, res) {
     var firstName = req.body.fName;
     var useremail = req.body.editthisemail;
     var lastName = req.body.lName;
@@ -280,12 +279,12 @@ function adminEditUser(req, res){
     var password = req.body.password;
     var ID = req.body.AUID;
     var department = req.body.departments;
-    
 
-    connection.getConnection(function(err, connect) {
+
+    connection.getConnection(function (err, connect) {
         if (err) throw err;
         var query = 'UPDATE users SET aurora_ID = ?, first_name = ?, last_name = ?, email = ?, department = ?, password = ? WHERE email = ?';
-        connection.query(query,[ID, firstName, lastName, useremail, department, password, editThis], function (err,result, rows, fields) {
+        connection.query(query, [ID, firstName, lastName, useremail, department, password, editThis], function (err, result, rows, fields) {
             if (err) throw err;
         });
 
@@ -296,30 +295,31 @@ function adminEditUser(req, res){
 }
 
 //Code for authenticating user
-function authenticateUser(req, res){
+//BT
+function authenticateUser(req, res) {
     var userName = req.body.email;
     var password = req.body.password;
     var notValid = true;
 
-    connection.getConnection(function(err, connect) {
+    connection.getConnection(function (err, connect) {
         if (err) throw err;
         connection.query('SELECT * FROM users', function (err, rows, fields) {
             if (err) throw err;
 
             //Goes through all users and finds the right one
-            for(var user in rows){
+            for (var user in rows) {
 
-                if (rows[user].email == userName && rows[user].password == password){
-                    
+                if (rows[user].email == userName && rows[user].password == password) {
+
                     //Grabs the email and name to be used in other pages, may add more here later
                     Email = rows[user].email;
 
-                    if(rows[user].isLeader == 1){
+                    if (rows[user].isLeader == 1) {
                         isLeader = true;
                     }
 
                     //Determines if user is an admin and if the admin page should load instead
-                    if(rows[user].isAdmin == 1){
+                    if (rows[user].isAdmin == 1) {
                         return res.redirect('/adminHomePage');
                     };
                     //if they're not an admin, the user page loads instead
@@ -327,7 +327,7 @@ function authenticateUser(req, res){
                 };
             };
             //If the for loop does not find the user, it'll redirect to the login error page
-            if(notValid){
+            if (notValid) {
                 return res.redirect('/loginError');
             };
         });
@@ -336,181 +336,112 @@ function authenticateUser(req, res){
 }
 
 //gets the meeting table
-function getMeetingsTable(){
-    connection.getConnection(function(err, con){
-        if(err) throw err;
-          console.log('connected to meetings');
-        connection.query('select * from meetings', function(err, res, cols){
-          if(err) throw err;
-    
-          console.log('going through meetings now');
-          for(var i=0; i<res.length; i++){
-            meetingTable +='<tr><td>'+ res[i].meeting_Id +'</td><td>'+ res[i].meeting_location +'</td><td>'+ res[i].meeting_date +'</td>'
-            meetingTable +='<td>'+ res[i].leader +'</td><td>'+ res[i].comments +'</td></tr>';
+//BT
+function getMeetingsTable() {
+    connection.getConnection(function (err, con) {
+        if (err) throw err;
+        console.log('connected to meetings');
+        connection.query('select * from meetings', function (err, res, cols) {
+            if (err) throw err;
 
-            if(res[i].didMeet == 0)
-            {
-                unsuccessfulMeetings += 1;
-            }
-            else if(res[i].didMeet == 2)
-            {
-                successfulMeetings += 1;
-            }
-            else
-            {
-                pendingMeetings += 1;
-            }
+            console.log('going through meetings now');
+            for (var i = 0; i < res.length; i++) {
+                meetingTable += '<tr><td>' + res[i].meeting_Id + '</td><td>' + res[i].meeting_location + '</td><td>' + res[i].meeting_date + '</td>'
+                meetingTable += '<td>' + res[i].leader + '</td><td>' + res[i].comments + '</td></tr>';
 
-          }
-          connection.releaseConnection(con);
-          
-          meetingTable ='<table border="1" class="meetingTable"><tr><th>Meeting Number</th><th>Meeting Location</th><th>Meeting Date</th><th>Leader</th><th>Comments</th></tr>'+ meetingTable +'</table>';
+                if (res[i].didMeet == 0) {
+                    unsuccessfulMeetings += 1;
+                }
+                else if (res[i].didMeet == 2) {
+                    successfulMeetings += 1;
+                }
+                else {
+                    pendingMeetings += 1;
+                }
+
+            }
+            connection.releaseConnection(con);
+
+            meetingTable = '<table border="1" class="meetingTable"><tr><th>Meeting Number</th><th>Meeting Location</th><th>Meeting Date</th><th>Leader</th><th>Comments</th></tr>' + meetingTable + '</table>';
         });
     });
 }
 
 //gets the user table from DB
-function getUsersTable(){
-    connection.getConnection(function(err, con){
-        if(err) throw err;
-          console.log('connected to users');
-        connection.query('select * from users', function(err, res, cols){
-          if(err) throw err;
-    
-          console.log('going through users now');
-          for(var i=0; i<res.length; i++){
-            userTable +='<tr><td>'+ res[i].aurora_ID +'</td><td>'+ res[i].first_name + ' ' + res[i].last_name +'</td><td>'+ res[i].email +'</td>'
-            userTable +='<td>'+ res[i].department +'</td></tr>';
-          }
-          connection.releaseConnection(con);
-    
-          userTable ='<table border="1" class="userTable"><tr><th>Aurora ID</th><th>Name</th><th>Email</th><th>Department</th></tr>'+ userTable +'</table>';
-        });
-    });
-}
-
-//get user status
-/*function getUsersStatus(){
-    var userName = Email;
-    var currentstatus = currentstatus;
-    var status = Status
-    //var status = rows[user].participant_status;
-    connection.getConnection(function(err, con){
-        if(err) throw err;
-          console.log('connected to users');
-        connection.query('select * from users', function(err, rows, res, cols){
-          if(err) throw err;
-          console.log('going through users now for status');
-          for(var user in rows){
-            if (rows[user].email == userName){
-                    console.log("got here")
-                    connection.query('SELECT participant_status FROM users WHERE email = "' +userName+ '"', function(err, result){
-                            status = rows[user].participant_status;
-                });
-                
-
-            //if they're not an admin, the user page loads instead
-            };
-         };
-          connection.releaseConnection(con);
-    
-          statusLabel ='<label class="status label">'+ status +'</label>';
-        });
-    });
-}
-*/
-
-// Comments Bar on Participation Status Page, Needs to be fixed slightly -- leave commented out
-
-/*function changeParticipationNotes(req, res){
-    //need to add code to connect to DB and table
-    var userName = Email;
-    var p_comments = req.body.comments
-    var runnable = true;
-    console.log("In function");
-    console.log(userName);
-    connection.getConnection(function(err, connect) {
+//BT
+function getUsersTable() {
+    connection.getConnection(function (err, con) {
         if (err) throw err;
-        connection.query('SELECT * FROM users', function (err, rows, fields) {
+        console.log('connected to users');
+        connection.query('select * from users', function (err, res, cols) {
             if (err) throw err;
 
-            //console.log(p_status);
-            console.log(userName);
-            if(runnable = true){
-                //Goes through all users and finds the right one
-                for(var user in rows){
-
-                    if (rows[user].email == userName){
-                    
-                        connection.query('UPDATE users SET partNotes = '+ p_comments +' WHERE email="'+userName+'"', function(err, result){
-                            console.log("worked");
-                            console.log(p_comments);
-                            console.log(Email);
-                            console.log('Rows affected:');
-                            //return res.redirect('/confirmationParticipation');
-                            });
-                    };
-                };
+            console.log('going through users now');
+            for (var i = 0; i < res.length; i++) {
+                userTable += '<tr><td>' + res[i].aurora_ID + '</td><td>' + res[i].first_name + ' ' + res[i].last_name + '</td><td>' + res[i].email + '</td>'
+                userTable += '<td>' + res[i].department + '</td><td>' + res[i].partNotes + '</td></tr>';
             }
+            connection.releaseConnection(con);
+
+            userTable = '<table border="1" class="userTable"><tr><th>Aurora ID</th><th>Name</th><th>Email</th><th>Department</th><th>Participation Note</th></tr>' + userTable + '</table>';
         });
-        connection.releaseConnection(connect);
     });
-}*/
+}
 
 //ability for users to change their participation status
-function changeParticipationStatus(req, res){
+function changeParticipationStatus(req, res) {
     //need to add code to connect to DB and table
     var userName = Email;
     var p_status = req.body.status;
     //var p_comments = req.body.comments
     //console.log(p_status);
     //console.log(p_comments);
-    connection.getConnection(function(err, connect) {
+    connection.getConnection(function (err, connect) {
         if (err) throw err;
         connection.query('SELECT * FROM users', function (err, rows, fields) {
             if (err) throw err;
 
             //console.log(p_status);
             //console.log(userName);
-            if(p_status == '0'){
+            if (p_status == '0') {
                 //Goes through all users and finds the right one
-                for(var user in rows){
-                    
-                    if (rows[user].email == userName){
-                    
-                        //Checks if it is for the current user logged in
-                        connection.query('UPDATE users SET participant_status = ' + '0' + ' WHERE email = "' + userName + '"', function(err, result){
-                                res.redirect('/confirmationParticipation');
-                                
-                                if(rows[user].participant_status == '1'){
-                                    statusLabel ='<label class="status label">Inactive</label>';
-                                }else if(rows[user].participant_status == '0'){
-                                    statusLabel ='<label class="status label">Inactive</label>';
-                                }else{
-                                    statusLabel ='<label class="status label">Error</label>';
-                                }
-                        });
-                        
+                for (var user in rows) {
 
-                    //if they're not an admin, the user page loads instead
+                    if (rows[user].email == userName) {
+
+                        //Checks if it is for the current user logged in
+                        connection.query('UPDATE users SET participant_status = ' + '0' + ' WHERE email = "' + userName + '"', function (err, result) {
+                            res.redirect('/confirmationParticipation');
+
+                            if (rows[user].participant_status == '1') {
+                                statusLabel = '<label class="status label">Inactive</label>';
+                            } else if (rows[user].participant_status == '0') {
+                                statusLabel = '<label class="status label">Inactive</label>';
+                            } else {
+                                statusLabel = '<label class="status label">Error</label>';
+                            }
+                        });
+
+
+                        //if they're not an admin, the user page loads instead
                     };
                 };
             }
-            else if(p_status == '1'){
-                for(var user in rows){
-                    if (rows[user].email == userName){
+            else if (p_status == '1') {
+                for (var user in rows) {
+                    if (rows[user].email == userName) {
                         console.log("Changing status")
 
-                        connection.query('UPDATE users SET participant_status = ' + '1' + ' WHERE email = "' + userName + '"', function(err, result){
+                        connection.query('UPDATE users SET participant_status = ' + '1' + ' WHERE email = "' + userName + '"', function (err, result) {
                             //Status = rows[user].participant_status;
 
 
-                            if(rows[user].participant_status == '1'){
-                                statusLabel ='<label class="status label">Active</label>';
-                            }else if(rows[user].participant_status == '0'){
-                                statusLabel ='<label class="status label">Active</label>';
-                            }else{
-                                statusLabel ='<label class="status label">Error</label>';
+                            if (rows[user].participant_status == '1') {
+                                statusLabel = '<label class="status label">Active</label>';
+                            } else if (rows[user].participant_status == '0') {
+                                statusLabel = '<label class="status label">Active</label>';
+                            } else {
+                                statusLabel = '<label class="status label">Error</label>';
                             }
 
 
@@ -521,59 +452,51 @@ function changeParticipationStatus(req, res){
                         });
                     };
                 }
-            }   
+            }
+        });
+        connection.releaseConnection(connect);
+    });
+}
+// Changes the notes for participation status comments
+//JK
+function changeParticipationNotes(req, res) {
+    //need to add code to connect to DB and table
+    var userName = Email;
+    var p_comments = req.body.comments
+    console.log("In function");
+    console.log(userName);
+    connection.getConnection(function (err, connect) {
+        if (err) throw err;
+        connection.query('SELECT * FROM users', function (err, rows, fields) {
+            if (err) throw err;
+            //console.log(p_status);
+            console.log(userName);
+            for (var user in rows) {
+                if (rows[user].email == userName) {
+                    var query = 'UPDATE users SET partNotes = ? WHERE email = ?';
+                    connection.query(query, [p_comments, userName], function (err, result, rows, fields) {
+                        if (err) throw err;
+                    });
+                };
+            };
         });
         connection.releaseConnection(connect);
     });
 }
 
-/*function changeParticipationNotes(req, res){
-    //need to add code to connect to DB and table
-    var userName = Email;
-    var p_comments = req.body.comments
-    var runnable = true;
-    console.log("In function");
-    console.log(userName);
-    connection.getConnection(function(err, connect) {
-        if (err) throw err;
-        connection.query('SELECT * FROM users', function (err, rows, fields) {
-            if (err) throw err;
-
-            //console.log(p_status);
-            console.log(userName);
-            if(runnable = true){
-                //Goes through all users and finds the right one
-                for(var user in rows){
-
-                    if (rows[user].email == userName){
-                    
-                        connection.query('UPDATE users SET partNotes = '+ p_comments +' WHERE email="'+userName+'"', function(err, result){
-                            console.log("worked");
-                            console.log(p_comments);
-                            console.log(Email);
-                            console.log('Rows affected:');
-                            //return res.redirect('/confirmationParticipation');
-                            });
-                    };
-                };
-            }
-        });
-        connection.releaseConnection(connect);
-    });
-}*/
-
 //Create groups on the 15th of each month
+//BT
 function createGroups() {
-    connection.getConnection(function(err, con){
-        if(err) throw err;
+    connection.getConnection(function (err, con) {
+        if (err) throw err;
 
         //Clears out meetings from last month
         connection.query('DELETE FROM meetings;');
 
         //Grabs all users and sets them into an array for sorting and randomization
-        connection.query('select * from users;', function(err, rows, cols){
-            if(err) throw err;
-            for(var users in rows){
+        connection.query('select * from users;', function (err, rows, cols) {
+            if (err) throw err;
+            for (var users in rows) {
                 allUsers.push(rows[users].email);
             }
 
@@ -584,22 +507,22 @@ function createGroups() {
             //then dividing them by the max group size (5 in this case). It then rounds up to the nearest
             //number, which should always give us the proper total number of meetings for each month 
             var userCount = allUsers.length;
-            var totalMeetings = Math.ceil(userCount/5);
+            var totalMeetings = Math.ceil(userCount / 5);
 
             //Creates the meetings
-            for(var i = 0; i < totalMeetings; i++){
+            for (var i = 0; i < totalMeetings; i++) {
                 connection.query('INSERT INTO meetings(meeting_Id, didMeet) VALUES (0, 1);');
-            }   
+            }
 
             //Divides up all users into seperate arrays where the max size is the total number of meetings
-            while(allUsers.length > 0){
+            while (allUsers.length > 0) {
                 groups.push(allUsers.splice(0, totalMeetings));
             }
 
             //Grabs all the new meeting IDs that were just created and throws them into an array
-            connection.query('SELECT * FROM meetings', function(err, rows, cols){
-                if(err) throw err;
-                for(var meets in rows){
+            connection.query('SELECT * FROM meetings', function (err, rows, cols) {
+                if (err) throw err;
+                for (var meets in rows) {
                     meetingIDs.push(rows[meets].meeting_Id);
                 }
 
@@ -607,26 +530,26 @@ function createGroups() {
                 //from the first array into participant1, then assigns all from the second array into
                 //participant2 etc. until the whole table is properly populated and no group is below or
                 //above the required amount of members
-                for(var i = 0; i < groups.length; i++){
-                    for(var j = 0; j < groups[i].length; j++){
+                for (var i = 0; i < groups.length; i++) {
+                    for (var j = 0; j < groups[i].length; j++) {
                         var participant = groups[i][j];
                         var participantNumber = i + 1;
-                        connection.query('UPDATE meetings SET participant' + participantNumber + ' = "' + participant + '" WHERE meeting_Id=' + meetingIDs[j] +';');
+                        connection.query('UPDATE meetings SET participant' + participantNumber + ' = "' + participant + '" WHERE meeting_Id=' + meetingIDs[j] + ';');
                     }
                 }
 
                 //Finds the leader for each meeting randomly
-                connection.query('SELECT * FROM meetings', function(err, rows, cols){
-                    if(err) throw err;
-                    for(var meets in rows){
+                connection.query('SELECT * FROM meetings', function (err, rows, cols) {
+                    if (err) throw err;
+                    for (var meets in rows) {
                         var leaderAssign = [];
                         leaderAssign.push(rows[meets].participant1);
                         leaderAssign.push(rows[meets].participant2);
                         leaderAssign.push(rows[meets].participant3);
-                        if(rows[meets].participant4 != null){
+                        if (rows[meets].participant4 != null) {
                             leaderAssign.push(rows[meets].participant4);
                         }
-                        if(rows[meets].participant5 != null){
+                        if (rows[meets].participant5 != null) {
                             leaderAssign.push(rows[meets].participant5);
                         }
                         var leader = leaderAssign[Math.floor(Math.random() * leaderAssign.length)];
@@ -639,39 +562,77 @@ function createGroups() {
         });
     });
 }
-
+//BT
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
-  
+
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {
-  
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-  
-      // And swap it with the current element.
-      temporaryValue = array[currentIndex];
-      array[currentIndex] = array[randomIndex];
-      array[randomIndex] = temporaryValue;
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
     }
-  
+
     return array;
 }
+//BT
+function resetLeaders() {
+    connection.getConnection(function (err, con) {
+        if (err) throw err;
+        connection.query('SELECT * FROM users', function (err, rows, cols) {
+            if (err) throw err;
 
-function resetLeaders(){
-      connection.getConnection(function(err, con){
-          if(err) throw err;
-        connection.query('SELECT * FROM users', function(err, rows, cols){
-            if(err) throw err;
-            
-            for(var user in rows){
+            for (var user in rows) {
                 var Email = rows[user].email;
                 connection.query('UPDATE users SET isLeader = 0 WHERE email = "' + Email + '";');
             }
 
         });
         connection.releaseConnection(con);
-      });
-  }
+    });
+}
+//Allows Leaders to edit the meeting information
+//JK
+function leaderEditMeeting(req, res) {
+    var thisLeader = Email;
+    var meetDate = req.body.mdate;
+    var meetLocation = req.body.mlocation;
+    var meetComments = req.body.mcomments;
+    var meetStatus = req.body.met;
+    //gets the connection from DB and parses through
+    connection.getConnection(function (err, connect) {
+        //if the connection passes
+        if (err) throw err;
+        //updates the date, location, and comments for the logged in leader
+        var query = 'UPDATE meetings SET meeting_date = ?, meeting_location = ?, comments = ? WHERE leader = ?';
+        connection.query(query, [meetDate, meetLocation, meetComments, thisLeader], function (err, result, rows, fields) {
+            if (err) throw err;
+        });
+        //Updates the DB for the didMeet status
+        if (meetStatus == '1') {
+            var query = 'UPDATE meetings SET didMeet = ? WHERE leader = ?';
+            connection.query(query, [meetStatus, thisLeader], function (err, result, rows, fields) {
+                if (err) throw err;
+            });
+        } else if (meetStatus == '0') {
+            var query = 'UPDATE meetings SET didMeet = ? WHERE leader = ?';
+            connection.query(query, [meetStatus, thisLeader], function (err, result, rows, fields) {
+                if (err) throw err;
+            });
+        } else if (meetStatus == '2') {
+            var query = 'UPDATE meetings SET didMeet = ? WHERE leader = ?';
+            connection.query(query, [meetStatus, thisLeader], function (err, result, rows, fields) {
+                if (err) throw err;
+            });
+        }
+        connection.releaseConnection(connect);
+
+    });
+    res.redirect('/leaderPage');
 }

@@ -6,6 +6,7 @@ block content
                 p(class="reportpClasses") Meetings Held: !{successfulMeetings}
                 p(class="reportpClasses") Meetings to be Held: !{pendingMeetings}
                 p(class="reportpClasses") Meetings Not Held: !{unsuccessfulMeetings}
+                div(class="tableclass")
                 | !{meetingTable}
                 button(class="reportButton" type="button" name="User" id="User" value="User" onclick="location.href = '/reportsUserPage';") Users
                 button(class="reportButton" type="button" name="Home" id="Home" value="Home" onclick="location.href = '/adminHomePage';") Home

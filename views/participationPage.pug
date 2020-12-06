@@ -67,8 +67,13 @@ head
                     input(class="form-control",name="comments" placeholder="Optional Comments" required autofocus)
                 .fromgroup
                     input(class="signInButton" type="submit" name="Submit" id="Submit" value="Submit Status")
-    
-
+        div 
+            form(method="post" action="changeParticipationNotes")
+                div.formgroup
+                    label(for="comments")
+                    input(class="form-control",name="comments" placeholder="Optional Comments" required autofocus)
+                .formgroup
+                    input(class="signInButton" type="submit" name="Submit" id="Submit" value="Submit Notes")
 
 
 

@@ -1,1 +1,34 @@
 extends layout
+block content
+    div(class="container")
+        div(class="loginPage")
+            form(class="form-signin" method="post" action="leaderEditMeeting")
+                #error
+                    if error
+                        p.text-danger Error!!!
+                h1(class="h1Classes") Meeting Info
+                p
+                | Here you can edit the information for your meeting. Edit the meeting date, location, comments for report, and whether or not it met.
+                
+                input(class="inputText" type="text" name="mdate" id="mdate" class="form-control" placeholder="Meeting Date")
+
+                input(class="inputText" type="text" name="mlocation" id="mlocation" class="form-control" placeholder="Location")
+
+                input(class="inputText" type="textarea" name="mcomments" id="mcomments" class="form-control" placeholder="Comments")
+
+                label(class='inputText') Did your meeting actually meet?
+                div.formgroup
+                    label(for='met' id='options')  Pending:
+                    input#active(type='radio',value='1', name="met")
+                div.formgroup
+                    label(for='met' id='options')  Met:
+                    input#active(type='radio',value='2', name="met")
+                div.formgroup
+                    label(for='met' id='options')  Did Not Meet:
+                    input#inactive(type='radio',value='0', name="met")
+
+                input(class="signInButton" type="submit" name="Submit" id="Submit" value="Submit" onclick="location.href = '/userHomePage';")
+
+                input(class="signInButton" type="button" name="Cancel" id="Cancel" value="Home" onclick="location.href = '/userHomePage';")
+    div(class="alertBottom")
+    div(class="alertTop")
