@@ -6,35 +6,89 @@
 
  #wrapper {
     overflow-x: hidden;
+    background-color: #378433;
+    font-family: "Gotham SSm A", "Gotham SSm B", sans-serif;
  }
-
 #sidebar-wrapper {
   min-height: 100vh;
   margin-left: -15rem;
-  background-color: #378433;
+  
   -webkit-transition: margin .25s ease-out;
   -moz-transition: margin .25s ease-out;
   -o-transition: margin .25s ease-out;
   transition: margin .25s ease-out;
 }
+.signInButton {
+  height: 35px;
+  width: 375px;
+  margin: 10px;
+}
+
+.h1, h1 {
+  font-size: 60pt;
+  font-style: italic;
+  text-align: left;
+  font-weight: 700;
+}
+#options{
+  font-size: 20pt;
+}
+input[type=checkbox], input[type=radio] {
+  border: 0px;
+  width: 10%;
+  height: 1em;
+}
+
+.btn-primary {
+  display: block;
+  padding: 1rem 1.5rem;
+  margin-right: 4px;
+  margin-bottom: 8px;
+  background-color: #47AA42;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #202020;
+  letter-spacing: 1px;
+  text-align: center;
+  text-transform: uppercase;
+  border: 0;
+  transition: background 300ms ease, box-shadow 300ms ease;
+  box-shadow: 4px 4px 0px 0px #EBEBEB;
+}
+.navbar-nav .nav-link {
+  padding-right: 0;
+  padding-left: 0;
+  color:white;
+}
+
+.bg-light {
+  background-color:#378433!important;
+  color: white;
+  font-family: "Gotham SSm A", "Gotham SSm B", sans-serif;
+}
+
+
 
 #sidebar-wrapper .sidebar-heading {
   padding: 0.875rem 1.25rem;
   font-size: 1.2rem;
+  color: white;
   background-color: #378433;
 }
 
-.bg-light .border-right{
+#sidebar-wrapper {
   background-color: #378433;
 }
 
+.navbar {
+  background-color: #378433;
+}
 
 #sidebar-wrapper .list-group {
   width: 15rem;
+  
 }
-#sidebar-wrapper{
-  background-color: #378433;
-}
+
 
 #page-content-wrapper {
   background-color: #00467F;
@@ -44,13 +98,13 @@
 
 #wrapper.toggled #sidebar-wrapper {
   margin-left: 0;
-  background-color: #378433;
+  
 }
 
 @media (min-width: 768px) {
   #sidebar-wrapper {
     margin-left: 0;
-    background-color: #378433;
+   
   }
 
   #page-content-wrapper {
@@ -61,5 +115,11 @@
   #wrapper.toggled #sidebar-wrapper {
     margin-left: -15rem;
     
+    
+  }
+  .navbar-expand-lg .navbar-nav .nav-link {
+    padding-right: .5rem;
+    padding-left: .5rem;
+    color: white;
   }
 }

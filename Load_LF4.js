@@ -15,7 +15,7 @@ var connection = mysql.createPool({
   password: 'cataDB1',
   database: 'CatalinaDB_F2200'
 })
-
+//shows connected to database in console
 console.log("Connected");
 
 //Set up mailing
@@ -54,23 +54,25 @@ if(currentDate == 1){
 
 getMeetingsTable();
 
-getUsersTable();
+//getUsersStatus();
 
+getUsersTable();
 
 //Load login page
 app.get('/login', function(req, res){
     res.render('loginPage');
 });
-
 //Authenticate the user and see if they are admin or not
 app.post('/authenticate', function(req, res){
     authenticateUser(req, res);
 });
-
+//Change Participation Status
 app.post('/changeParticipationStatus', function(req, res){
     changeParticipationStatus(req, res);
-   // changeParticipationNotes(req, res);
 });
+
+
+//In Progress Change notes Function - Leave commented out
 //app.post('/changeParticipationNotes', function(req, res){
  //   changeParticipationNotes(req, res);
 //});
@@ -80,10 +82,11 @@ app.post('/changeParticipationStatus', function(req, res){
 app.post('/addUser', function(req, res){
     addUser(req, res);
 });
+//Edits user
 app.post('/editUser', function(req, res){
     editUser(req, res);
 });
-
+//Edit user by Admin
 app.post('/adminEditUser', function(req, res){
     adminEditUser(req, res);
 });
@@ -143,6 +146,7 @@ app.get('/confirmationParticipation', function(req,res){
 app.listen(3000);
 
 //All functions go here
+
 //Checks for active participants and emails them at the 1st of every month
 function emailMonthly(){
     connection.getConnection(function(err, connect) {
@@ -206,7 +210,7 @@ function addUser(req, res){
     });
     res.redirect('/login');
 }
-// Edit user
+// Edit User by that User
 function editUser(req, res){
     var firstName = req.body.fName;
     var useremail = Email;
@@ -244,7 +248,7 @@ function editUser(req, res){
 }
 
 
-//searching and editing a user
+//Admin search user, then able to Edit their info
 function adminEditUser(req, res){
     var firstName = req.body.fName;
     var useremail = req.body.editthisemail;
@@ -306,6 +310,7 @@ function authenticateUser(req, res){
     });
 }
 
+//gets the meeting table
 function getMeetingsTable(){
     connection.getConnection(function(err, con){
         if(err) throw err;
@@ -339,6 +344,7 @@ function getMeetingsTable(){
     });
 }
 
+//gets the user table from DB
 function getUsersTable(){
     connection.getConnection(function(err, con){
         if(err) throw err;
@@ -357,52 +363,39 @@ function getUsersTable(){
         });
     });
 }
-function changeParticipationStatus(req, res){
-    //need to add code to connect to DB and table
+
+//get user status
+/*function getUsersStatus(){
     var userName = Email;
-    var p_status = req.body.status;
-    //var p_comments = req.body.comments
-    //console.log(p_status);
-    //console.log(p_comments);
-    connection.getConnection(function(err, connect) {
-        if (err) throw err;
-        connection.query('SELECT * FROM users', function (err, rows, fields) {
-            if (err) throw err;
+    var currentstatus = currentstatus;
+    var status = Status
+    //var status = rows[user].participant_status;
+    connection.getConnection(function(err, con){
+        if(err) throw err;
+          console.log('connected to users');
+        connection.query('select * from users', function(err, rows, res, cols){
+          if(err) throw err;
+          console.log('going through users now for status');
+          for(var user in rows){
+            if (rows[user].email == userName){
+                    console.log("got here")
+                    connection.query('SELECT participant_status FROM users WHERE email = "' +userName+ '"', function(err, result){
+                            status = rows[user].participant_status;
+                });
+                
 
-            //console.log(p_status);
-            //console.log(userName);
-            if(p_status == '0'){
-                //Goes through all users and finds the right one
-                for(var user in rows){
-
-                    if (rows[user].email == userName){
-                    
-                        //Checks if it is for the current user logged in
-                        connection.query('UPDATE users SET participant_status = ' + '0' + ' WHERE email = "' + userName + '"', function(err, result){
-                                res.redirect('/confirmationParticipation');
-                        });
-                        
-
-                    //if they're not an admin, the user page loads instead
-                    };
-                };
-            }
-            else if(p_status == '1'){
-                for(var user in rows){
-                    if (rows[user].email == userName){
-                        console.log("Changing status")
-
-                        connection.query('UPDATE users SET participant_status = ' + '1' + ' WHERE email = "' + userName + '"', function(err, result){
-                            return res.redirect('/confirmationParticipation');
-                        });
-                    };
-                }
-            }   
+            //if they're not an admin, the user page loads instead
+            };
+         };
+          connection.releaseConnection(con);
+    
+          statusLabel ='<label class="status label">'+ status +'</label>';
         });
-        connection.releaseConnection(connect);
     });
 }
-// Comments Bar on Status Page, Needs to be fixed slightly
+*/
+
+// Comments Bar on Participation Status Page, Needs to be fixed slightly -- leave commented out
 
 /*function changeParticipationNotes(req, res){
     //need to add code to connect to DB and table
@@ -438,3 +431,73 @@ function changeParticipationStatus(req, res){
         connection.releaseConnection(connect);
     });
 }*/
+
+//ability for users to change their participation status
+function changeParticipationStatus(req, res){
+    //need to add code to connect to DB and table
+    var userName = Email;
+    var p_status = req.body.status;
+    //var p_comments = req.body.comments
+    //console.log(p_status);
+    //console.log(p_comments);
+    connection.getConnection(function(err, connect) {
+        if (err) throw err;
+        connection.query('SELECT * FROM users', function (err, rows, fields) {
+            if (err) throw err;
+
+            //console.log(p_status);
+            //console.log(userName);
+            if(p_status == '0'){
+                //Goes through all users and finds the right one
+                for(var user in rows){
+                    
+                    if (rows[user].email == userName){
+                    
+                        //Checks if it is for the current user logged in
+                        connection.query('UPDATE users SET participant_status = ' + '0' + ' WHERE email = "' + userName + '"', function(err, result){
+                                res.redirect('/confirmationParticipation');
+                                
+                                if(rows[user].participant_status == '1'){
+                                    statusLabel ='<label class="status label">Inactive</label>';
+                                }else if(rows[user].participant_status == '0'){
+                                    statusLabel ='<label class="status label">Inactive</label>';
+                                }else{
+                                    statusLabel ='<label class="status label">Error</label>';
+                                }
+                        });
+                        
+
+                    //if they're not an admin, the user page loads instead
+                    };
+                };
+            }
+            else if(p_status == '1'){
+                for(var user in rows){
+                    if (rows[user].email == userName){
+                        console.log("Changing status")
+
+                        connection.query('UPDATE users SET participant_status = ' + '1' + ' WHERE email = "' + userName + '"', function(err, result){
+                            //Status = rows[user].participant_status;
+
+
+                            if(rows[user].participant_status == '1'){
+                                statusLabel ='<label class="status label">Active</label>';
+                            }else if(rows[user].participant_status == '0'){
+                                statusLabel ='<label class="status label">Active</label>';
+                            }else{
+                                statusLabel ='<label class="status label">Error</label>';
+                            }
+
+
+
+
+                            return res.redirect('/confirmationParticipation');
+
+                        });
+                    };
+                }
+            }   
+        });
+        connection.releaseConnection(connect);
+    });
+}
